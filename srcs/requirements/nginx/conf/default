@@ -1,0 +1,32 @@
+server {
+    listen 8080 default_server;
+	listen [::]:8080 default_server;
+    #listen [::]:443 ssl default_server;
+
+    include /etc/nginx/mime.types;
+
+    root /var/www/html;
+
+    index index.php index.html index.htm index.nginx-debian.html;
+
+    #ssl_certificate     /etc/nginx/ssl/server.crt;
+    #ssl_certificate_key /etc/nginx/ssl/server.key;
+
+    #ssl_protocols TLSv1.2 TLSv1.3;
+
+    server_name irabhi.42.fr;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+
+    location /about/ {
+        index index.html;
+        try_files $uri $uri/ =404;
+    }
+
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass wordpress:9000;
+    }
+}

@@ -1,9 +1,13 @@
-FROM debian:latest
+FROM debian:bullseye
 
-#RUN apt update && apt install -y php-fpm
-RUN apt update -y && apt upgrade -y &&  apt install php php-fpm -y
+RUN apt update -y && apt upgrade -y && apt install php-redis curl php php-fpm php-mysql -y
 
+# Fix: PHP-FPM needs this directory to store its pid/socket file
+RUN mkdir -p /run/php
 
-CMD ["php-fpm8.4", "-F"]
+COPY tools/wordpress.sh /tmp/wordpress.sh
+COPY conf/www.conf /etc/php/7.4/fpm/pool.d/www.conf
 
-#what is the "php-fpm8.4", "F" and php-fp
+RUN chmod +x /tmp/wordpress.sh
+
+CMD ["/tmp/wordpress.sh"]
